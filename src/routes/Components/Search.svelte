@@ -17,12 +17,6 @@
         }
     }
 
-    const scrollToComponent = () => {
-        const browser = document.getElementById('browser');
-        if (!browser) return;
-        browser.scrollIntoView({behavior: "smooth"});
-    }
-
     const findFile = async () => {
         if (!searchDisabled) {
             await fetch(`http://localhost:8080/files/get/${id}`, {
@@ -57,16 +51,26 @@
             {/if}
         </label>
     </div>
-    <div id="download" on:click={findFile} on:keypress={findFile} class="actionButton {!searchDisabled ? 'neonEffect' : 'neonOff'}">Search File</div>
+    <div id="download" on:click={findFile} on:keypress={findFile} class="actionButton {!searchDisabled ? 'neonEffect actionButton_active' : 'neonOff'}">Search File</div>
 
 <style>
     .actionButton {
         transition: all 0.5s ease;
         margin: 2em 0;
+        padding: 0.5em 1em;
         font-size: 1.3em;
-        font-family: "Yellowtail", sans-serif;
         text-decoration: none;
         letter-spacing: 0.25em;
+        border-radius: 20px;
+        font-family: "Yellowtail", sans-serif;
+        border: 2px solid darkgrey;
+    }
+
+    .actionButton_active {
+        border: 2px solid white;
+        box-shadow: 0 0 0.8rem var(--clr-blue),
+        0 0 1.2rem var(--clr-blue),
+        inset 0 0 1.2rem var(--clr-blue);
     }
 
     .error {
@@ -105,11 +109,7 @@
         font-size: 1em;
         text-align: center;
         background: black;
-        border: solid var(--clr-white) 0.1em;
-        border-radius: 0.5em;
-        box-shadow: 0 0 0.8rem var(--clr-blue),
-        0 0 1.2rem var(--clr-blue),
-        inset 0 0 0.8rem var(--clr-blue);
+        border-bottom: solid var(--clr-white) 0.1em;
         letter-spacing: 0.1em;
         color: var(--clr-white);
     }

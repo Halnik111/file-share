@@ -2,9 +2,9 @@
 <script>
     import '../style.css';
     import {onMount} from "svelte";
-    import Upload from "./file/Upload.svelte";
-    import Search from "./file/Search.svelte";
-    import Browser from "./file/Browser.svelte";
+    import Upload from "./Components/Upload.svelte";
+    import Search from "./Components/Search.svelte";
+    import Browser from "./Components/Browser.svelte";
 
     let windowSize;
     let action = 'download';
@@ -23,10 +23,10 @@
     <a href="/" class="neon_logo neonEffect border" >File-<span class="flickEffect">S</span>hare</a>
 
 
-    <div class="menu_box border">
+    <div class="menu_box ">
         <div class="option_buttons">
-            <div on:click={() => action = 'download'} on:keypress={() => action = 'download'} class="option_button"><div class="submit {action === 'download' ? 'neonEffect' : 'neonOff'}">Search</div></div>
-            <div on:click={() => action = 'upload'} on:keypress={() => action = 'download'} class="option_button"><div class="submit {action === 'upload' ? 'neonEffect' : 'neonOff'}">Upload</div></div>
+            <div on:click={() => action = 'download'} on:keypress={() => action = 'download'} class="option_button {action === 'download' ? 'option_button_underline' : ''}"><div class="submit ">Search</div></div>
+            <div on:click={() => action = 'upload'} on:keypress={() => action = 'upload'} class="option_button {action === 'upload' ? 'option_button_underline' : ''}"><div class="submit ">Upload</div></div>
         </div>
         {#if action === 'download'}
             <Search bind:response={response} />
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-    {#if Array.isArray(response)}
+    {#if response?.id}
         <Browser response={response}/>
     {/if}
 </body>
@@ -57,9 +57,7 @@
         justify-content: space-between;
         align-items: center;
         border-radius: 50px;
-        padding: 30px;
-        width: 270px;
-        height: 270px;
+        height: 350px;
     }
 
     .neon_logo {
@@ -76,24 +74,25 @@
 
     .option_buttons {
         display: flex;
-        gap: 25px;
+        gap: 20px;
+        margin-bottom: 60px;
     }
 
     .submit {
         color: white;
-        transition: all 0.5s ease;
         letter-spacing: 0.1rem;
         margin-left: 0.1rem;
     }
 
-    .option_button {
+    .option_buttons > .option_button {
         font-size: 1.5em;
-        padding: 0.4em 1em;
-        border-radius: 20px;
+        padding: 0.4em 0.5em;
         cursor: pointer;
     }
 
-
+    .option_button_underline {
+        border-bottom: 3px solid white;
+    }
 
     @media screen and (max-width: 768px){
         .menu {
