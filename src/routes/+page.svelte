@@ -45,26 +45,24 @@
     .menu {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
         height: 100vh;
     }
 
     .menu_box {
-        margin-bottom: auto;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
         border-radius: 50px;
-        height: 350px;
+        margin-bottom: auto;
     }
 
     .neon_logo {
         font-family: "Yellowtail", sans-serif;
+        margin-bottom: auto;
         cursor: pointer;
         margin-top: 40px;
-        margin-bottom: auto;
         text-transform: none;
         font-size: 2.2em;
         padding: 25px;
@@ -79,7 +77,7 @@
     }
 
     .submit {
-        color: white;
+        color: var(--clr-white);
         letter-spacing: 0.1rem;
         margin-left: 0.1rem;
     }
@@ -91,7 +89,7 @@
     }
 
     .option_button_underline {
-        border-bottom: 3px solid white;
+        border-bottom: 3px solid var(--clr-white);
     }
 
     @media screen and (max-width: 768px){

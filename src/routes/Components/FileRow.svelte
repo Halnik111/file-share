@@ -17,12 +17,13 @@
     <div class="file_table_depth_bar">
 
     </div>
-    <div class="file_table_file_name">
-        <a on:click={handleClick} class="test">{file.name}</a>
-    </div>
     <div class="file_table_file_download">
         <img alt="Download" on:click={handleClick} src="./src/img/download_icon.svg" height="20" width="20"/>
     </div>
+    <div class="file_table_file_name">
+        <a class="test">{file.name}</a>
+    </div>
+
 </div>
 
 <style>
@@ -38,21 +39,18 @@
         height: inherit;
         width: 20px;
         font-size: 20px;
-        border-right: 1px solid gray;
-
+        border-right: 1px solid var(--clr-gray);
     }
 
     .file_table_depth_bar {
         height: inherit;
         width: 5px;
         margin: 0 3px;
-        background-color: aquamarine;
+        background-color: var(--clr-green);
     }
 
     .file_table_file_name {
         padding: 5px;
-        border-left: 1px solid gray;
-
     }
 
     .file_table_file_download {
@@ -62,10 +60,11 @@
         width: 30px;
         height: inherit;
         cursor: pointer;
+        border-left: 1px solid var(--clr-gray);
     }
 
     .test {
         cursor: pointer;
-        color: white;
+        color: var(--clr-white);
     }
 </style>

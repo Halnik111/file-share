@@ -2,6 +2,7 @@
 <script>
     import {afterUpdate} from "svelte";
     import FileRow from "./FileRow.svelte";
+    import DirRow from "./DirRow.svelte";
 
 
     export let response;
@@ -32,6 +33,7 @@
             <h3>File ID No: {response.id}</h3>
         </div>
         <div class="file_table_content">
+            <DirRow />
             {#each response.files as file}
                 <FileRow index={getIndex()} file={file}/>
             {/each}
@@ -49,12 +51,12 @@
     }
 
     .file_table {
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid var(--clr-gray);
     }
 
     .file_table_header {
         padding-bottom: 10px;
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid var(--clr-gray);
     }
 
     .file_table_content {

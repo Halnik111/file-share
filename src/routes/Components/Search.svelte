@@ -1,9 +1,15 @@
 <script>
 
+    import {afterUpdate} from "svelte";
+    import Modal from "./Modal.svelte";
+
     export let response;
     let id = '';
     let searchDisabled = true;
-
+    let accessCodes = [];
+    let showEditModal = false;
+    let codeName = '';
+    let editKey = '';
 
     $: {
         if (id < 1000) {
@@ -16,6 +22,10 @@
             id = id.toString().substring(0,4);
         }
     }
+
+    afterUpdate(() => {
+        accessCodes = getSavedCodes();
+    });
 
     const findFile = async () => {
         if (!searchDisabled) {
@@ -34,24 +44,76 @@
         }
     }
 
+    const getSavedCodes = () => {
+        const result = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const item = localStorage.key(i);
+            if (item.startsWith('pin-')) {
+                const pin = item.substring(item.indexOf('-')+1, item.indexOf('-')+5);
+                const name = item.substring(item.indexOf('-', item.indexOf('-') + 1) + 1 )
+                result.push({pin: pin, name: name});
+            }
+        }
+        return result;
+    }
+
     const keyInput = (event) => {
         if (event.key === "Enter" && !searchDisabled) {
             findFile();
         }
     }
 
+    const editAccessCode =  (accessCode, oldName, newName) => {
+        console.log(accessCode);
+        const oldPinKey = `pin-${accessCode}-${oldName}`;
+        const newPinKey = `pin-${accessCode}-${newName}`
+        const accessCodeValue = localStorage.getItem(oldPinKey);
+        localStorage.removeItem(oldPinKey);
+        localStorage.setItem(newPinKey, accessCodeValue);
+        showEditModal = false
+        codeName = '';
+        console.log(newPinKey)
+    }
+
 </script>
 
-    <div class="form">
-        <p>ID</p>
-        <label id="label">
-            <input on:keydown={keyInput} bind:value={id} min="4" max="4" type="number" id="input" class="inputField"/>
-            {#if response === "no such file"}
-                <div class="error">No such file</div>
-            {/if}
-        </label>
+<div class="form">
+    <p>ID</p>
+    <label id="label">
+        <input on:keydown={keyInput} bind:value={id} min="4" max="4" type="number" id="input" class="inputField"/>
+        {#if response === "no such file"}
+            <div class="error">No such file</div>
+        {/if}
+    </label>
+</div>
+<div id="download" on:click={findFile} on:keypress={findFile} class="actionButton {!searchDisabled ? 'neonEffect actionButton_active' : 'neonOff'}">Search File</div>
+{#if accessCodes.length > 0}
+    <div class="saved_codes">
+        <div class="saved_codes_header">
+            Saved Codes
+        </div>
+        <div class="saved_codes_content">
+            {#each accessCodes as code}
+                <div>
+                    <div class="saved_code_edit_button" on:click={() => {editKey = code;showEditModal =  true}}>Edit</div> {code.pin} - {code.name}
+                </div>
+            {/each}
+        </div>
     </div>
-    <div id="download" on:click={findFile} on:keypress={findFile} class="actionButton {!searchDisabled ? 'neonEffect actionButton_active' : 'neonOff'}">Search File</div>
+{/if}
+
+<Modal bind:showEditModal>
+    <div class="modal_edit_accessCode">
+        <div>
+            Pin: {editKey.pin}
+        </div>
+        <div>
+            Name:
+            <input bind:value={codeName} type="text" />
+            <div class="modal_edit_accessCode_confirm_button" on:click={() => editAccessCode(editKey.pin, editKey.name, codeName)}>OK</div>
+        </div>
+    </div>
+</Modal>
 
 <style>
     .actionButton {
@@ -63,18 +125,20 @@
         letter-spacing: 0.25em;
         border-radius: 20px;
         font-family: "Yellowtail", sans-serif;
-        border: 2px solid darkgrey;
+        color: var(--clr-gray);
+        border: 2px solid #3f3f40;
     }
 
     .actionButton_active {
-        border: 2px solid white;
+        color: var(--clr-white);
+        border: 2px solid var(--clr-white);
         box-shadow: 0 0 0.8rem var(--clr-blue),
         0 0 1.2rem var(--clr-blue),
         inset 0 0 1.2rem var(--clr-blue);
     }
 
     .error {
-        color: white;
+        color: var(--clr-white);
         margin: 5px 0;
     }
 
@@ -108,13 +172,43 @@
         width: 80px;
         font-size: 1em;
         text-align: center;
-        background: black;
+        background: var(--clr-black);
         border-bottom: solid var(--clr-white) 0.1em;
         letter-spacing: 0.1em;
         color: var(--clr-white);
     }
 
     .inputField:focus {
-        outline: white;
+        outline: var(--clr-white);
     }
+
+    .saved_codes {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .saved_codes_header {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .saved_codes_content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .saved_code_edit_button {
+        cursor: pointer;
+        display: inline-block;
+        border-right: 1px solid white;
+        padding-right: 6px;
+    }
+
+    .modal_edit_accessCode_confirm_button {
+        display: inline-block;
+        cursor: pointer;
+    }
+
 </style>
