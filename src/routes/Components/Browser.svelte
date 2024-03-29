@@ -32,11 +32,15 @@
         <div class="file_table_header">
             <h3>File ID No: {response.id}</h3>
         </div>
-        <div class="file_table_content">
-            <DirRow />
-            {#each response.files as file}
-                <FileRow index={getIndex()} file={file}/>
-            {/each}
+        <div class="file_table_content_wrapper">
+            <div class="file_table_content">
+                <DirRow index={getIndex()} color="indianred"/>
+                <DirRow index={getIndex()} color="indianred"/>
+
+                {#each response.files as file}
+                    <FileRow index={getIndex()} file={file} color= {'rgb(81, 234, 174)'}/>
+                {/each}
+            </div>
         </div>
     </div>
 </div>
@@ -59,8 +63,11 @@
         border-bottom: 1px solid var(--clr-gray);
     }
 
-    .file_table_content {
+    .file_table_content_wrapper {
         display: flex;
-        flex-direction: column;
     }
+
+    .file_table_content {
+    }
+
 </style>

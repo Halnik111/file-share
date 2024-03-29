@@ -11,6 +11,8 @@
 
     const uploadFile = async () => {
         if (!uploadDisabled) {
+            pin = 'loading';
+
             let readers = [];
 
             for (const file of files) {
@@ -65,15 +67,21 @@
 </div>
 <div id="upload" on:click={uploadFile} on:keypress={uploadFile} class="actionButton {!uploadDisabled ? 'neonEffect actionButton_active' : 'neonOff'}">Upload File</div>
 {#if pin.length === 4}
-    <div class="upload_success">
+    <div class="upload_status upload_status_success">
         <svg width=30 height=30 viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path id="success_icon" d="M1 6.5C1 6.5 2.34315 11 4 11C5.5 11 12 1.5 12 1.5" stroke=var(--clr-green) stroke-width="2" stroke-linecap="round"/>
         </svg>
-        Access Code: 1134
+        Access Code: {pin}
     </div>
-<!--    <div class="upload_status">-->
-<!--        Access Code: {pin}-->
-<!--    </div>-->
+{:else if pin === 'loading'}
+    <div class="upload_status upload_status_loading">
+        <svg id="loading_spinner" width="30" height="30" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path id="Vector" d="M12.5001 7.5C12.5001 8.36319 12.2766 9.21162 11.8514 9.96281C11.4262 10.714 10.8139 11.3423 10.0739 11.7867C9.33381 12.231 8.49137 12.4762 7.6285 12.4984C6.76562 12.5205 5.9117 12.3189 5.14984 11.9132" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </g>
+        </svg>
+        Uploading..
+    </div>
 {/if}
 
 <style>
@@ -147,13 +155,35 @@
     .custom-file-input:hover::before {
     }
 
-    .upload_success {
+    .upload_status {
         display: flex;
         align-items: center;
         gap: 10px;
         font-size: 20px;
-        border-left: 3px solid var(--clr-green);
+
         padding: 5px 10px;
+    }
+
+    .upload_status_success {
+        border-left: 3px solid var(--clr-green);
+    }
+
+    .upload_status_loading {
+        border-left: 3px solid var(--clr-white);
+    }
+
+    #loading_spinner {
+        animation: spinnerAnimation 1s linear infinite;
+    }
+
+    @keyframes spinnerAnimation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
 </style>
