@@ -20,6 +20,8 @@
             }
 
             Promise.all(readers).then(files => {
+                const formData = new FormData();
+                formData.append("files", files);
                 fetch('http://localhost:8080/files/upload', {
                     method: 'POST',
                     headers: {"Content-Type" : "application/json"},

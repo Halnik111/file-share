@@ -34,9 +34,11 @@
         </div>
         <div class="file_table_content_wrapper">
             <div class="file_table_content">
-                <DirRow index={getIndex()} color="indianred"/>
-                <DirRow index={getIndex()} color="indianred"/>
-
+<!--                <DirRow index={getIndex()} color="indianred"/>-->
+<!--                <DirRow index={getIndex()} color="indianred"/>-->
+                {#each response.folders as folder}
+                    <DirRow index={getIndex()} folder={folder} color="indianred"/>
+                {/each}
                 {#each response.files as file}
                     <FileRow index={getIndex()} file={file} color= {'rgb(81, 234, 174)'}/>
                 {/each}

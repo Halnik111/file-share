@@ -1,22 +1,27 @@
 <script>
 import FileRow from "./FileRow.svelte";
+import DirRow from "./DirRow.svelte";
 
 export let color;
 export let index;
+export let folder;
+
 let childIndex = 0;
-const file = {
-    name: 'text.txt'
-}
+let response = '';
 
-const dir = {name: 'directory', files: [{name: 'one.txt'}, {name:"two.txt"}],
-
-    dirs: [
-        {name: 'nestedDir', files: [{name: 'three.txt'}, {name: 'four.txt'}]},
-        {name: 'Changed', files: [{name: 'three.txt'}, {name: 'four.txt'}]}
-    ]}
-
-const handleClick = () => {
-
+const handleClick = async () => {
+    console.log(folder.storage)
+    await fetch(`http://localhost:8080/files/get/${folder.storage}`, {
+        method: 'GET',
+        headers: {"Content-Type" : "application/json"},
+    }) .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+            response = data
+        })
+        .catch(err => {
+            throw err;
+        })
 }
 
 const getIndex = () => {
@@ -41,7 +46,7 @@ const getIndex = () => {
             <div class="file_table_dir_body">
                 <div class="file_table_dir_header">
                     <div class="file_table_dir_name">
-                        <a class="test">{dir.dirs[0].name}</a>
+                        <a class="test">{folder.name}</a>
                     </div>
                     <div class="file_table_dir_open">
                         <div on:click={handleClick}>==></div>
@@ -49,9 +54,14 @@ const getIndex = () => {
                 </div>
                 <div class="file_table_dir_content">
                     <div>
-                        {#each dir.dirs[0].files as file}
-                            <FileRow index={getIndex()} file={file} color="cyan"/>
-                        {/each}
+                        {#if response?.id}
+                            {#each response.folders as folder}
+                                <DirRow index={getIndex()} folder={folder} color="cyan"/>
+                            {/each}
+                            {#each response.files as file}
+                                <FileRow index={getIndex()} file={file} color="cyan"/>
+                            {/each}
+                        {/if}
                     </div>
                 </div>
             </div>
