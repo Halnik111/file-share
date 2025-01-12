@@ -29,7 +29,7 @@
 
     const findFile = async () => {
         if (!searchDisabled) {
-            await fetch(`http://localhost:8080/files/get/${id}`, {
+            await fetch(`http://18.185.86.227/files/get/${id}`, {
                 method: 'GET',
                 headers: {"Content-Type" : "application/json"},
             }) .then(res => res.json())

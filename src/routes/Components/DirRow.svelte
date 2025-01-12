@@ -10,18 +10,7 @@ let childIndex = 0;
 let response = '';
 
 const handleClick = async () => {
-    console.log(folder.storage)
-    await fetch(`http://localhost:8080/files/get/${folder.storage}`, {
-        method: 'GET',
-        headers: {"Content-Type" : "application/json"},
-    }) .then(res => res.json())
-        .then((data) => {
-            console.log(data)
-            response = data
-        })
-        .catch(err => {
-            throw err;
-        })
+    response = folder;
 }
 
 const getIndex = () => {
@@ -54,10 +43,12 @@ const getIndex = () => {
                 </div>
                 <div class="file_table_dir_content">
                     <div>
-                        {#if response?.id}
+                        {#if response?.folders}
                             {#each response.folders as folder}
                                 <DirRow index={getIndex()} folder={folder} color="cyan"/>
                             {/each}
+                        {/if}
+                        {#if response?.files}
                             {#each response.files as file}
                                 <FileRow index={getIndex()} file={file} color="cyan"/>
                             {/each}
