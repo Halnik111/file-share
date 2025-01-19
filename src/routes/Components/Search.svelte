@@ -29,7 +29,7 @@
 
     const findFile = async () => {
         if (!searchDisabled) {
-            await fetch(`http://18.185.86.227/files/get/${id}`, {
+            await fetch(`https://file-share-backend-production-ca92.up.railway.app/files/get/${id}`, {
                 method: 'GET',
                 headers: {"Content-Type" : "application/json"},
             }) .then(res => res.json())
